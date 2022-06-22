@@ -17,29 +17,31 @@ let numerosMises = [];
  * @param tableau
  */
 const afficherTapis = (tableau) => {
-    console.log(`${chalk_1.default.bgGreen(`    ${tableauTapisRouletteModifiable[0]}    `)}`);
-    console.log(`${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[1]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[2]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[3]}`)}`);
-    console.log(`${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[4]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[5]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[6]}`)}`);
-    console.log(`${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[7]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[8]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[9]}`)}`);
-    console.log(`${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[10]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[11]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[12]}`)}`);
-    console.log(`${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[13]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[14]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[15]}`)}`);
-    console.log(`${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[16]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[17]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[18]}`)}`);
-    console.log(`${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[19]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[20]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[21]}`)}`);
-    console.log(`${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[22]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[23]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[24]}`)}`);
-    console.log(`${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[25]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[26]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[27]}`)}`);
-    console.log(`${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[28]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[29]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[30]}`)}`);
-    console.log(`${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[31]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[32]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[33]}`)}`);
-    console.log(`${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[34]}`)}${chalk_1.default.bgRed(`${tableauTapisRouletteModifiable[35]}`)}${chalk_1.default.bgGray(`${tableauTapisRouletteModifiable[36]}`)}`);
+    console.log(`${chalk_1.default.bgGreen(`    ${tableau[0]}    `)}`);
+    console.log(`${chalk_1.default.bgRed(`${tableau[1]}`)}${chalk_1.default.bgGray(`${tableau[2]}`)}${chalk_1.default.bgRed(`${tableau[3]}`)}`);
+    console.log(`${chalk_1.default.bgGray(`${tableau[4]}`)}${chalk_1.default.bgRed(`${tableau[5]}`)}${chalk_1.default.bgGray(`${tableau[6]}`)}`);
+    console.log(`${chalk_1.default.bgRed(`${tableau[7]}`)}${chalk_1.default.bgGray(`${tableau[8]}`)}${chalk_1.default.bgRed(`${tableau[9]}`)}`);
+    console.log(`${chalk_1.default.bgGray(`${tableau[10]}`)}${chalk_1.default.bgRed(`${tableau[11]}`)}${chalk_1.default.bgGray(`${tableau[12]}`)}`);
+    console.log(`${chalk_1.default.bgRed(`${tableau[13]}`)}${chalk_1.default.bgGray(`${tableau[14]}`)}${chalk_1.default.bgRed(`${tableau[15]}`)}`);
+    console.log(`${chalk_1.default.bgGray(`${tableau[16]}`)}${chalk_1.default.bgRed(`${tableau[17]}`)}${chalk_1.default.bgGray(`${tableau[18]}`)}`);
+    console.log(`${chalk_1.default.bgRed(`${tableau[19]}`)}${chalk_1.default.bgGray(`${tableau[20]}`)}${chalk_1.default.bgRed(`${tableau[21]}`)}`);
+    console.log(`${chalk_1.default.bgGray(`${tableau[22]}`)}${chalk_1.default.bgRed(`${tableau[23]}`)}${chalk_1.default.bgGray(`${tableau[24]}`)}`);
+    console.log(`${chalk_1.default.bgRed(`${tableau[25]}`)}${chalk_1.default.bgGray(`${tableau[26]}`)}${chalk_1.default.bgRed(`${tableau[27]}`)}`);
+    console.log(`${chalk_1.default.bgGray(`${tableau[28]}`)}${chalk_1.default.bgRed(`${tableau[29]}`)}${chalk_1.default.bgGray(`${tableau[30]}`)}`);
+    console.log(`${chalk_1.default.bgRed(`${tableau[31]}`)}${chalk_1.default.bgGray(`${tableau[32]}`)}${chalk_1.default.bgRed(`${tableau[33]}`)}`);
+    console.log(`${chalk_1.default.bgGray(`${tableau[34]}`)}${chalk_1.default.bgRed(`${tableau[35]}`)}${chalk_1.default.bgGray(`${tableau[36]}`)}`);
 };
 const satisfactionUtilisateur = () => {
     return readline_sync_1.default.keyInYN('Est-ce que cela vous convient ? (Y = Oui/ N = Non');
 };
 // Fonction placer les jetons sur le tapis 'chalk.bgYellow('    ')'
 const placerJetons = (tableau) => {
+    console.log(numerosMises);
     // Colorise en jaune sur le tapis les numéros choisis
-    for (let element of numerosMises) {
+    for (let element of tableau) {
         tableauTapisRouletteModifiable[element] = chalk_1.default.bgYellow('    ');
     }
+    console.log(tableauTapisRouletteModifiable);
     // Affiche le tapis mis à jour
     afficherTapis(tableauTapisRouletteModifiable);
     // Demande à l'utilisateur si son choix lui convient et conserve sa réponse dans une variable
@@ -62,9 +64,13 @@ const misePlein = () => {
 };
 // Fonction pour miser deux numéros côte à côte CHEVAL x17
 const miseCheval = () => {
+    let premierNombrePossible = ['2', '5', '8', '11', '14', '17', '20', '23', '26', '29', '32', '35'];
     // On demande à l'utilisateur les numéros qu'il veut miser 
-    let nombre1 = readline_sync_1.default.questionInt('Sur quel numero voulez-vous parier en premier ?');
-    let nombre2 = readline_sync_1.default.questionInt('Sur quel numero voulez-vous parier en deuxieme ?');
+    let nombre1 = readline_sync_1.default.keyInSelect(premierNombrePossible, 'Sur quel numero voulez-vous parier en premier ?');
+    nombre1 = parseInt(premierNombrePossible[nombre1]);
+    let deuxiemeNombrePossible = [`${tableauTapisRoulette[nombre1 - 1]}`, `${tableauTapisRoulette[nombre1 + 1]}`];
+    let nombre2 = readline_sync_1.default.keyInSelect(deuxiemeNombrePossible, 'Sur quel numero voulez-vous parier en deuxieme ?');
+    nombre2 = parseInt(deuxiemeNombrePossible[nombre2]);
     // On place les numéros dans le tableau 'numerosMises'
     numerosMises.push(nombre1);
     numerosMises.push(nombre2);
@@ -73,12 +79,14 @@ const miseCheval = () => {
 };
 // Fonction pour miser trois numéros transversaux TRANSVERSAL x11
 const miseTransversal = () => {
+    let premierNombrePossible = ['1', '4', '7', '10', '13', '16', '19', '22', '25', '28', '31', '34'];
     // On demande à l'utilisateur les numéros qu'il veut miser 
-    let nombre1 = readline_sync_1.default.questionInt('Sur quel numero voulez-vous parier en premier ?');
-    let nombre2 = readline_sync_1.default.questionInt('Sur quel numero voulez-vous parier en deuxieme ?');
+    let nombre = readline_sync_1.default.keyInSelect(premierNombrePossible, 'Sur quelle rangée de numéros voulez-vous parier ?');
+    nombre = parseInt(premierNombrePossible[nombre]);
     // On place les numéros dans le tableau 'numerosMises'
-    numerosMises.push(nombre1);
-    numerosMises.push(nombre2);
+    numerosMises.push(nombre);
+    numerosMises.push(nombre + 1);
+    numerosMises.push(nombre + 2);
     // On appelle placerJetons
     placerJetons(numerosMises);
 };

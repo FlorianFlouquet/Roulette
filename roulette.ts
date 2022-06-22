@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import { readlinkSync } from 'fs';
 import read from 'readline-sync'
 
 
@@ -17,19 +18,19 @@ let numerosMises : number[] = [];
  * @param tableau 
  */
  const afficherTapis = (tableau : string[]) : void => {
-    console.log(`${chalk.bgGreen(`    ${tableauTapisRouletteModifiable[0]}    `)}`);
-    console.log(`${chalk.bgRed(`${tableauTapisRouletteModifiable[1]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[2]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[3]}`)}`);
-    console.log(`${chalk.bgGray(`${tableauTapisRouletteModifiable[4]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[5]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[6]}`)}`);
-    console.log(`${chalk.bgRed(`${tableauTapisRouletteModifiable[7]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[8]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[9]}`)}`);
-    console.log(`${chalk.bgGray(`${tableauTapisRouletteModifiable[10]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[11]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[12]}`)}`);
-    console.log(`${chalk.bgRed(`${tableauTapisRouletteModifiable[13]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[14]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[15]}`)}`);
-    console.log(`${chalk.bgGray(`${tableauTapisRouletteModifiable[16]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[17]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[18]}`)}`);
-    console.log(`${chalk.bgRed(`${tableauTapisRouletteModifiable[19]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[20]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[21]}`)}`);
-    console.log(`${chalk.bgGray(`${tableauTapisRouletteModifiable[22]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[23]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[24]}`)}`);
-    console.log(`${chalk.bgRed(`${tableauTapisRouletteModifiable[25]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[26]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[27]}`)}`);
-    console.log(`${chalk.bgGray(`${tableauTapisRouletteModifiable[28]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[29]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[30]}`)}`);
-    console.log(`${chalk.bgRed(`${tableauTapisRouletteModifiable[31]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[32]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[33]}`)}`);
-    console.log(`${chalk.bgGray(`${tableauTapisRouletteModifiable[34]}`)}${chalk.bgRed(`${tableauTapisRouletteModifiable[35]}`)}${chalk.bgGray(`${tableauTapisRouletteModifiable[36]}`)}`);
+    console.log(`${chalk.bgGreen(`    ${tableau[0]}    `)}`);
+    console.log(`${chalk.bgRed(`${tableau[1]}`)}${chalk.bgGray(`${tableau[2]}`)}${chalk.bgRed(`${tableau[3]}`)}`);
+    console.log(`${chalk.bgGray(`${tableau[4]}`)}${chalk.bgRed(`${tableau[5]}`)}${chalk.bgGray(`${tableau[6]}`)}`);
+    console.log(`${chalk.bgRed(`${tableau[7]}`)}${chalk.bgGray(`${tableau[8]}`)}${chalk.bgRed(`${tableau[9]}`)}`);
+    console.log(`${chalk.bgGray(`${tableau[10]}`)}${chalk.bgRed(`${tableau[11]}`)}${chalk.bgGray(`${tableau[12]}`)}`);
+    console.log(`${chalk.bgRed(`${tableau[13]}`)}${chalk.bgGray(`${tableau[14]}`)}${chalk.bgRed(`${tableau[15]}`)}`);
+    console.log(`${chalk.bgGray(`${tableau[16]}`)}${chalk.bgRed(`${tableau[17]}`)}${chalk.bgGray(`${tableau[18]}`)}`);
+    console.log(`${chalk.bgRed(`${tableau[19]}`)}${chalk.bgGray(`${tableau[20]}`)}${chalk.bgRed(`${tableau[21]}`)}`);
+    console.log(`${chalk.bgGray(`${tableau[22]}`)}${chalk.bgRed(`${tableau[23]}`)}${chalk.bgGray(`${tableau[24]}`)}`);
+    console.log(`${chalk.bgRed(`${tableau[25]}`)}${chalk.bgGray(`${tableau[26]}`)}${chalk.bgRed(`${tableau[27]}`)}`);
+    console.log(`${chalk.bgGray(`${tableau[28]}`)}${chalk.bgRed(`${tableau[29]}`)}${chalk.bgGray(`${tableau[30]}`)}`);
+    console.log(`${chalk.bgRed(`${tableau[31]}`)}${chalk.bgGray(`${tableau[32]}`)}${chalk.bgRed(`${tableau[33]}`)}`);
+    console.log(`${chalk.bgGray(`${tableau[34]}`)}${chalk.bgRed(`${tableau[35]}`)}${chalk.bgGray(`${tableau[36]}`)}`);
 }
 
 const satisfactionUtilisateur = () : string | boolean => {
@@ -38,10 +39,14 @@ const satisfactionUtilisateur = () : string | boolean => {
 
 // Fonction placer les jetons sur le tapis 'chalk.bgYellow('    ')'
 const placerJetons = (tableau : number[]) => {
+    console.log(numerosMises);
+    
     // Colorise en jaune sur le tapis les numéros choisis
-    for (let element of numerosMises) {
+    for (let element of tableau) {
         tableauTapisRouletteModifiable[element] = chalk.bgYellow('    ');
     }
+    console.log(tableauTapisRouletteModifiable);
+    
     
     // Affiche le tapis mis à jour
     afficherTapis(tableauTapisRouletteModifiable);
@@ -52,12 +57,11 @@ const placerJetons = (tableau : number[]) => {
     }
     else {
         console.log('On continue');
-        
     }
 }
 
 // Fonction pour miser un numéro seulement PLEIN x36
-const misePlein = () => {
+const misePlein = () : void => {
     // On demande à l'utilisateur le numéro qu'il veut miser 
     let nombre = read.questionInt('Sur quel numero voulez-vous parier ?');
     // On place le numéro dans le tableau 'numerosMises'
@@ -67,25 +71,36 @@ const misePlein = () => {
 }
 
 // Fonction pour miser deux numéros côte à côte CHEVAL x17
-const miseCheval = () => {
+const miseCheval = () : void => {
+    let premierNombrePossible : string[] = ['2','5','8','11','14','17','20','23','26','29','32','35'];
     // On demande à l'utilisateur les numéros qu'il veut miser 
-    let nombre1 = read.questionInt('Sur quel numero voulez-vous parier en premier ?'); 
-    let nombre2 = read.questionInt('Sur quel numero voulez-vous parier en deuxieme ?');
+    let nombre1 = read.keyInSelect(premierNombrePossible, 'Sur quel numero voulez-vous parier en premier ?');
+    nombre1 = parseInt(premierNombrePossible[nombre1]);
+
+    let deuxiemeNombrePossible : string[] = [`${tableauTapisRoulette[nombre1 - 1]}`, `${tableauTapisRoulette[nombre1 + 1]}`];
+    let nombre2 = read.keyInSelect(deuxiemeNombrePossible, 'Sur quel numero voulez-vous parier en deuxieme ?');
+    nombre2 = parseInt(deuxiemeNombrePossible[nombre2]);
+
     // On place les numéros dans le tableau 'numerosMises'
     numerosMises.push(nombre1);
     numerosMises.push(nombre2);
+
     // On appelle placerJetons
     placerJetons(numerosMises);
 }
 
 // Fonction pour miser trois numéros transversaux TRANSVERSAL x11
-const miseTransversal = () => {
+const miseTransversal = () : void => {
+    let premierNombrePossible : string[] = ['1','4','7','10','13','16','19','22','25','28','31','34'];
     // On demande à l'utilisateur les numéros qu'il veut miser 
-    let nombre1 = read.questionInt('Sur quel numero voulez-vous parier en premier ?'); 
-    let nombre2 = read.questionInt('Sur quel numero voulez-vous parier en deuxieme ?');
+    let nombre : number = read.keyInSelect(premierNombrePossible, 'Sur quelle rangée de numéros voulez-vous parier ?'); 
+    nombre = parseInt(premierNombrePossible[nombre]);
+
     // On place les numéros dans le tableau 'numerosMises'
-    numerosMises.push(nombre1);
-    numerosMises.push(nombre2);
+    numerosMises.push(nombre);
+    numerosMises.push(nombre + 1);
+    numerosMises.push(nombre + 2);
+  
     // On appelle placerJetons
     placerJetons(numerosMises);
 }
