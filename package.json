@@ -1,0 +1,28 @@
+{
+  "name": "roulette",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node ./dist/roulette.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FlorianFlouquet/Roulette.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FlorianFlouquet/Roulette/issues"
+  },
+  "homepage": "https://github.com/FlorianFlouquet/Roulette#readme",
+  "dependencies": {
+    "chalk": "^4.0.1",
+    "readline-sync": "^1.4.10"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/readline-sync": "^1.4.4"
+  }
+}
