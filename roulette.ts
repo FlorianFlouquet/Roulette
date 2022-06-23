@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-import { readlinkSync } from 'fs';
 import read from 'readline-sync'
 
 
@@ -12,25 +11,28 @@ const misesPossibles = ['Plein (36 fois la mise)', 'Cheval (17 fois la mise)', '
 // On met le tableau représentant le tapis dans une variable pour pouvoir le modifier
 let tableauTapisRouletteModifiable : string[] = [...tableauTapisRoulette];
 let numerosMises : number[] = [];
+let cagnotte : number = 0;
+let bonNombre : number = 0;
+let partieTerminee : boolean = false;
 
 /**
  * Affiche dans la console le tapis de jeu
  * @param tableau 
  */
  const afficherTapis = (tableau : string[]) : void => {
-    console.log(`${chalk.bgGreen(`    ${tableau[0]}    `)}`);
-    console.log(`${chalk.bgRed(`${tableau[1]}`)}${chalk.bgGray(`${tableau[2]}`)}${chalk.bgRed(`${tableau[3]}`)}`);
-    console.log(`${chalk.bgGray(`${tableau[4]}`)}${chalk.bgRed(`${tableau[5]}`)}${chalk.bgGray(`${tableau[6]}`)}`);
-    console.log(`${chalk.bgRed(`${tableau[7]}`)}${chalk.bgGray(`${tableau[8]}`)}${chalk.bgRed(`${tableau[9]}`)}`);
-    console.log(`${chalk.bgGray(`${tableau[10]}`)}${chalk.bgRed(`${tableau[11]}`)}${chalk.bgGray(`${tableau[12]}`)}`);
-    console.log(`${chalk.bgRed(`${tableau[13]}`)}${chalk.bgGray(`${tableau[14]}`)}${chalk.bgRed(`${tableau[15]}`)}`);
-    console.log(`${chalk.bgGray(`${tableau[16]}`)}${chalk.bgRed(`${tableau[17]}`)}${chalk.bgGray(`${tableau[18]}`)}`);
-    console.log(`${chalk.bgRed(`${tableau[19]}`)}${chalk.bgGray(`${tableau[20]}`)}${chalk.bgRed(`${tableau[21]}`)}`);
-    console.log(`${chalk.bgGray(`${tableau[22]}`)}${chalk.bgRed(`${tableau[23]}`)}${chalk.bgGray(`${tableau[24]}`)}`);
-    console.log(`${chalk.bgRed(`${tableau[25]}`)}${chalk.bgGray(`${tableau[26]}`)}${chalk.bgRed(`${tableau[27]}`)}`);
-    console.log(`${chalk.bgGray(`${tableau[28]}`)}${chalk.bgRed(`${tableau[29]}`)}${chalk.bgGray(`${tableau[30]}`)}`);
-    console.log(`${chalk.bgRed(`${tableau[31]}`)}${chalk.bgGray(`${tableau[32]}`)}${chalk.bgRed(`${tableau[33]}`)}`);
-    console.log(`${chalk.bgGray(`${tableau[34]}`)}${chalk.bgRed(`${tableau[35]}`)}${chalk.bgGray(`${tableau[36]}`)}`);
+    console.log(`   ${chalk.bgGreen(`    ${tableau[0]}    `)}`);
+    console.log(`   ${chalk.bgRed(`${tableau[1]}`)}${chalk.bgGray(`${tableau[2]}`)}${chalk.bgRed(`${tableau[3]}`)}`);
+    console.log(`   ${chalk.bgGray(`${tableau[4]}`)}${chalk.bgRed(`${tableau[5]}`)}${chalk.bgGray(`${tableau[6]}`)}`);
+    console.log(`   ${chalk.bgRed(`${tableau[7]}`)}${chalk.bgGray(`${tableau[8]}`)}${chalk.bgRed(`${tableau[9]}`)}`);
+    console.log(`   ${chalk.bgGray(`${tableau[10]}`)}${chalk.bgGray(`${tableau[11]}`)}${chalk.bgRed(`${tableau[12]}`)}`);
+    console.log(`   ${chalk.bgGray(`${tableau[13]}`)}${chalk.bgRed(`${tableau[14]}`)}${chalk.bgGray(`${tableau[15]}`)}`);
+    console.log(`   ${chalk.bgRed(`${tableau[16]}`)}${chalk.bgGray(`${tableau[17]}`)}${chalk.bgRed(`${tableau[18]}`)}`);
+    console.log(`   ${chalk.bgRed(`${tableau[19]}`)}${chalk.bgGray(`${tableau[20]}`)}${chalk.bgRed(`${tableau[21]}`)}`);
+    console.log(`   ${chalk.bgGray(`${tableau[22]}`)}${chalk.bgRed(`${tableau[23]}`)}${chalk.bgGray(`${tableau[24]}`)}`);
+    console.log(`   ${chalk.bgRed(`${tableau[25]}`)}${chalk.bgGray(`${tableau[26]}`)}${chalk.bgRed(`${tableau[27]}`)}`);
+    console.log(`   ${chalk.bgGray(`${tableau[28]}`)}${chalk.bgGray(`${tableau[29]}`)}${chalk.bgRed(`${tableau[30]}`)}`);
+    console.log(`   ${chalk.bgGray(`${tableau[31]}`)}${chalk.bgRed(`${tableau[32]}`)}${chalk.bgGray(`${tableau[33]}`)}`);
+    console.log(`   ${chalk.bgRed(`${tableau[34]}`)}${chalk.bgGray(`${tableau[35]}`)}${chalk.bgRed(`${tableau[36]}`)}`);
 }
 
 /**
@@ -42,6 +44,15 @@ const satisfactionUtilisateur = () : string | boolean => {
     return read.keyInYN('Est-ce que cela vous convient ? (Y = Oui/ N = Non)');
 }
 
+const continuer = () => {
+    let continueJeu : boolean | string = read.keyInYN('Voulez-vous continuer ?');
+    console.clear();
+    if (!continueJeu) {
+        partieTerminee = true;
+        console.log(`Vous sortez du casino avec ${cagnotte} jetons !`);
+    }
+}
+
 /**
  * Fonction placer les jetons sur le tapis 
  * @param tableau 
@@ -49,8 +60,11 @@ const satisfactionUtilisateur = () : string | boolean => {
 const placerJetons = (tableau : number[]) => {
     // Colorise en jaune sur le tapis les numéros choisis
     for (let element of tableau) {
-        tableauTapisRouletteModifiable[element] = chalk.bgYellow('    ');
+        tableauTapisRouletteModifiable[element] = chalk.bgYellow(`    `);
     }
+
+    console.log(numerosMises);
+    
     
     // Affiche le tapis mis à jour
     afficherTapis(tableauTapisRouletteModifiable);
@@ -59,10 +73,56 @@ const placerJetons = (tableau : number[]) => {
     if (!utilisateurSatisfait) {
         roulette();
     }
+}
+
+/**
+ * Regarde si le nombre à trouver correspond aux nombres
+ * choisis par l'utilisateur
+ * @returns 
+ */
+const leJoueurAGagne = () : boolean => {
+    let victoire = false;
+    for (let i = 0; i < numerosMises[i]; i++) {
+        if (numerosMises[i] == bonNombre) {
+            victoire = true;
+        }
+    }
+    console.log(bonNombre);
+    return victoire;
+}
+
+/**
+ * Actualise le montant de la cagnotte après une victoire
+ * @param ratio 
+ */
+const jetonsGagnes = (tableau : number[]) => {
+    cagnotte += tableau[0] * tableau[1];  
+    console.log(`Votre cagnotte est de ${cagnotte}`);
+    continuer();
+}
+
+const jeterDuCasino = () => {
+    console.log(`Votre cagnotte est de ${cagnotte} jetons`);
+    if (cagnotte <= 0) {
+        console.log('DEGAGEZ DE MON ETABLISSEMENT !');
+        partieTerminee = true;
+    }
     else {
-        console.log('On continue');
+        continuer();
     }
 }
+
+/**
+ * Génére un nombre entre 0 et 36 et le retourne
+ * @returns 
+ */
+const genererUnNombreAleatoire = () => {
+    bonNombre = Math.trunc(Math.random() * 37);
+    while (bonNombre == 37) {
+        bonNombre = Math.trunc(Math.random() * 37);
+    }  
+}
+
 /**
  * Permet de créer des question à choix multiples en rentrant 
  * un tableau string, contenant les choix de réponses, et une question
@@ -110,7 +170,7 @@ const miseCheval = () : void => {
 const miseTransversal = () : void => {
     const premierNombrePossible : string[] = ['1','4','7','10','13','16','19','22','25','28','31','34'];
     // On demande à l'utilisateur les numéros qu'il veut miser 
-    let nombre : number = questionKeySelect(premierNombrePossible, 'Sur quelle rangée de numéros voulez-vous parier ?'); 
+    let nombre : number = questionKeySelect(premierNombrePossible, 'Sur quelle rangee de numeros voulez-vous parier ?'); 
 
     // On place les numéros dans le tableau 'numerosMises'
     numerosMises.push(nombre);
@@ -129,71 +189,231 @@ const miseCarre = () : void => {
     let secondNombrePossible : string[] = [];
 
     if (nombre1 == 2) {
-        secondNombrePossible = ['4', '6'];
+        secondNombrePossible = ['1', '3'];
+        let nombre2 : number = questionKeySelect(secondNombrePossible, 'Choisissez le second nombre');
+        numerosMises.push(nombre1);
+        numerosMises.push(nombre2);
+        numerosMises.push(nombre1 + 3);
+        numerosMises.push(nombre2 + 3);
+
+        placerJetons(numerosMises);
     }
     else if (nombre1 == 35) {
-        secondNombrePossible = ['31, 33'];
+        secondNombrePossible = ['34, 36'];
+        let nombre2 : number = questionKeySelect(secondNombrePossible, 'Choisissez le second nombre');
+        numerosMises.push(nombre1);
+        numerosMises.push(nombre2);
+        numerosMises.push(nombre1 - 3);
+        numerosMises.push(nombre2 - 3);
+
+        placerJetons(numerosMises); 
     }
     else {
-        for (let i = -4; i < 5; i++) {
-            if(i != 0) {
-                secondNombrePossible.push((nombre1 + i).toString());
-            }
+        secondNombrePossible = [`${nombre1 - 3}`, `${nombre1 + 3}`];
+        let nombre2 : number = questionKeySelect(secondNombrePossible, 'Choisissez le second nombre');
+
+        let dernierNombres : string[] = [`${nombre1 - 1}`, `${nombre1 + 1}`];
+        let nombre3 : number = questionKeySelect(dernierNombres, 'Choisissez les derniers nombres');
+        let nombre4 : number = 0;
+        if(nombre1 > nombre2) {
+            nombre4 = nombre3 - 3;
         }
+        else {
+            nombre4 = nombre3 + 3;
+        }
+        
+        numerosMises.push(nombre1);
+        numerosMises.push(nombre2);
+        numerosMises.push(nombre3);
+        numerosMises.push(nombre4);
+
+        placerJetons(numerosMises);
     }
 }
 // Fonction pour miser six numéros (2lignes de 3) SIXAIN x5
+const miseSixain = () => {
+    const premierNombrePossible : string[] = ['1','4','7','10','13','16','19','22','25','28','31','34'];
+
+    let ligne1 : number = questionKeySelect(premierNombrePossible, 'Choisissez une première ligne');
+    numerosMises.push(ligne1);
+    numerosMises.push(ligne1+1);
+    numerosMises.push(ligne1+2);
+    if (ligne1 == 1) {
+        numerosMises.push(ligne1+3);
+        numerosMises.push(ligne1+4);
+        numerosMises.push(ligne1+5);
+    }
+    else if (ligne1 == 34) {
+        numerosMises.push(ligne1-3);
+        numerosMises.push(ligne1-2);
+        numerosMises.push(ligne1-1);
+    }
+    else {
+        let ligne2 : number = questionKeySelect([`${ligne1-3}`, `${ligne1+3}`], 'Choisissez la deuxieme ligne');
+
+        numerosMises.push(ligne2);
+        numerosMises.push(ligne2+1);
+        numerosMises.push(ligne2+2);
+    }
+
+    placerJetons(numerosMises);
+}
+
 // Fonction pour miser 12 numéros (1 des 3 grandes zones) DOUZAINE x3
+const miseDouzaine = () => {
+    const troisZonesPossibles : string[] = ['1 - 12', '13 - 24', '25 - 36'];
+
+    let zoneChoisie : number = questionKeySelect(troisZonesPossibles, 'Choisissez la zone sur laquelle parier');
+    
+    if(zoneChoisie == 1) {
+        for (let i = 1; i < 13; i++) {
+            numerosMises.push(i);
+        }
+    }
+    else if(zoneChoisie == 13) {
+        for (let i = 13; i < 25; i++) {
+            numerosMises.push(i);
+        }
+    }
+    else {
+        for (let i = 25; i < 37; i++) {
+            numerosMises.push(i);
+        }
+    }
+    placerJetons(numerosMises);
+    
+}
 // Fonction pour miser 24 numéros (2 des 3 grandes zones) DOUZAINE A CHEVAL x2
+const miseDouzaineCheval = () => {
+    let zoneChoisie = questionKeySelect(['1 - 24', '13 - 36'], 'Quelle zone voulez-vous choisir');
+
+    if(zoneChoisie == 1) {
+        for (let i = 1; i < 25; i++) {
+            numerosMises.push(i);
+        }
+    }
+    else {
+        for (let i = 13; i < 37; i++) {
+            numerosMises.push(i);
+        }
+    }
+    placerJetons(numerosMises);
+}
 // Fonction pour miser une colonne (12 numéros) COLONNE x3
+const miseColonne = () => {
+    let colonneChoisie = questionKeySelect(['1', '2', '3'], 'Quelle colonne voulez-vous choisir');
+
+    for (let i = 0; i < 37; i+=3) {
+        numerosMises.push(colonneChoisie+i);
+    }
+    placerJetons(numerosMises);
+}
 // Fonction pour miser deux colonnes (24 numéros) COLONNE A CHEVAL x2
+const miseColonneCheval = () => {
+    let partieChoisie = questionKeySelect(['1 (Colonnes 1 et 2)', '2 (Colonnes 2 et 3)'], 'Quelle partie voulez-vous choisir');
+
+    for (let i = 0; i < 37; i+=3) {
+        numerosMises.push(partieChoisie+i);
+    }
+    for (let i = 1; i < 37; i+=3) {
+        numerosMises.push(partieChoisie+i);
+    }
+
+    placerJetons(numerosMises);
+}
+
+/**
+ * Demande le montant de la mise et le retourne
+ */
+const demanderLeMontant = () : number => {
+    console.log(`Votre cagnotte: ${cagnotte} jetons`);
+    let mise : number = read.questionInt('Combien voulez-vous miser ?');
+    while (mise > cagnotte) {
+        mise = read.questionInt('Combien voulez-vous miser ?');
+    }
+    cagnotte -= mise;
+    genererUnNombreAleatoire();
+    return mise;
+}
  
 /**
  * Demande à l'utilisateur quel type de mise il veut faire
  * @returns 
  */
-const demanderMise = () : void => {
+const demanderMise = () : number[] => {
     let choixMise : number = read.keyInSelect(misesPossibles, "Quel type de mise voulez vous choisir ?");
+    let ratio : number = 0;
     if (choixMise == 0) {
         misePlein();        
+        ratio = 36
     }
     else if (choixMise == 1) {
         miseCheval();
+        ratio = 17;
     }
     else if (choixMise == 2) {
         miseTransversal();
+        ratio = 11;
     }
     else if (choixMise == 3) {
         miseCarre();
+        ratio = 8;
     }
-    // else if (choixMise == 4) {
-    //     miseSixian();
-    // }
-    // else if (choixMise == 5) {
-    //     miseDouzaine();
-    // }
-    // else if (choixMise == 6) {
-    //     miseDouzaineCheval();
-    // }
-    // else if (choixMise == 7) {
-    //     miseColonne();
-    // }
-    // else {
-    //     miseColonneCheval();
-    // }
-    // return choixMise;
+    else if (choixMise == 4) {
+        miseSixain();
+        ratio = 5;
+    }
+    else if (choixMise == 5) {
+        miseDouzaine();
+        ratio = 3;
+    }
+    else if (choixMise == 6) {
+        miseDouzaineCheval();
+        ratio = 2;
+    }
+    else if (choixMise == 7) {
+        miseColonne();
+        ratio = 3;
+    }
+    else {
+        miseColonneCheval();
+        ratio = 2;
+    }
+    let mise = demanderLeMontant();
+    return [ratio, mise];
 }
 
 /**
  * Fonction qui permet de jouer à la roulette à travers la console
  */
 const roulette = () : void => {
-    tableauTapisRouletteModifiable = [...tableauTapisRoulette];
-    numerosMises = [];
-    // On affiche le tapis dans sa version par défaut
-    afficherTapis(tableauTapisRouletteModifiable);
-    // On demande à l'utilisateur la mise qu'il veut faire
-    demanderMise();
+    while(!partieTerminee) {
+        tableauTapisRouletteModifiable = [...tableauTapisRoulette];
+        numerosMises = [];
+        // On affiche le tapis dans sa version par défaut
+        afficherTapis(tableauTapisRouletteModifiable);
+        console.log(`Votre cagnotte est de ${cagnotte}`);
+        // On demande à l'utilisateur la mise qu'il veut faire
+        let ratioEtMise : number[] = demanderMise();
+        let trouve : boolean = leJoueurAGagne();
+        
+        if (trouve) {
+            console.log('Gagne !');
+            jetonsGagnes(ratioEtMise);
+        }
+        else {
+            console.log('Perdu !');
+            jeterDuCasino();       
+        }
+    }
 }
 
-roulette();
+/**
+ * Demande le montant de jeton de l'utilisateur
+ */
+const initier = () => {
+    cagnotte = read.questionInt('Combien de jetons voulez-vous ?');
+    roulette();
+}
+
+initier();
