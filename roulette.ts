@@ -33,20 +33,24 @@ let numerosMises : number[] = [];
     console.log(`${chalk.bgGray(`${tableau[34]}`)}${chalk.bgRed(`${tableau[35]}`)}${chalk.bgGray(`${tableau[36]}`)}`);
 }
 
+/**
+ * Demande à l'utilisateur s'il est satisfait de ses choix.
+ * Si oui renvoit true sinon renvoit false
+ * @returns 
+ */
 const satisfactionUtilisateur = () : string | boolean => {
-    return read.keyInYN('Est-ce que cela vous convient ? (Y = Oui/ N = Non');
+    return read.keyInYN('Est-ce que cela vous convient ? (Y = Oui/ N = Non)');
 }
 
-// Fonction placer les jetons sur le tapis 'chalk.bgYellow('    ')'
+/**
+ * Fonction placer les jetons sur le tapis 
+ * @param tableau 
+ */
 const placerJetons = (tableau : number[]) => {
-    console.log(numerosMises);
-    
     // Colorise en jaune sur le tapis les numéros choisis
     for (let element of tableau) {
         tableauTapisRouletteModifiable[element] = chalk.bgYellow('    ');
     }
-    console.log(tableauTapisRouletteModifiable);
-    
     
     // Affiche le tapis mis à jour
     afficherTapis(tableauTapisRouletteModifiable);
@@ -59,11 +63,25 @@ const placerJetons = (tableau : number[]) => {
         console.log('On continue');
     }
 }
+/**
+ * Permet de créer des question à choix multiples en rentrant 
+ * un tableau string, contenant les choix de réponses, et une question
+ * @param tableau 
+ * @param question 
+ * @returns 
+ */
+const questionKeySelect = (tableau : string[], question : string) : number => {
+    let answer : number = read.keyInSelect(tableau, question);
+    answer = parseInt(tableau[answer]);
+    return answer;
+}   
 
-// Fonction pour miser un numéro seulement PLEIN x36
+/**
+ * Fonction pour miser un numéro seulement PLEIN x36
+ */
 const misePlein = () : void => {
     // On demande à l'utilisateur le numéro qu'il veut miser 
-    let nombre = read.questionInt('Sur quel numero voulez-vous parier ?');
+    let nombre : number = read.questionInt('Sur quel numero voulez-vous parier ?');
     // On place le numéro dans le tableau 'numerosMises'
     numerosMises.push(nombre);
     // On appelle placerJetons
@@ -72,14 +90,13 @@ const misePlein = () : void => {
 
 // Fonction pour miser deux numéros côte à côte CHEVAL x17
 const miseCheval = () : void => {
-    let premierNombrePossible : string[] = ['2','5','8','11','14','17','20','23','26','29','32','35'];
+    // On créé un tableau de string car la méthode keyInSelect le nécessite
+    const premierNombrePossible : string[] = ['2','5','8','11','14','17','20','23','26','29','32','35'];
     // On demande à l'utilisateur les numéros qu'il veut miser 
-    let nombre1 = read.keyInSelect(premierNombrePossible, 'Sur quel numero voulez-vous parier en premier ?');
-    nombre1 = parseInt(premierNombrePossible[nombre1]);
+    let nombre1 : number  = questionKeySelect(premierNombrePossible, 'Sur quel numero voulez-vous parier en premier ?');
 
     let deuxiemeNombrePossible : string[] = [`${tableauTapisRoulette[nombre1 - 1]}`, `${tableauTapisRoulette[nombre1 + 1]}`];
-    let nombre2 = read.keyInSelect(deuxiemeNombrePossible, 'Sur quel numero voulez-vous parier en deuxieme ?');
-    nombre2 = parseInt(deuxiemeNombrePossible[nombre2]);
+    let nombre2 = questionKeySelect(deuxiemeNombrePossible, 'Sur quel numero voulez-vous parier en deuxieme ?');
 
     // On place les numéros dans le tableau 'numerosMises'
     numerosMises.push(nombre1);
@@ -91,10 +108,9 @@ const miseCheval = () : void => {
 
 // Fonction pour miser trois numéros transversaux TRANSVERSAL x11
 const miseTransversal = () : void => {
-    let premierNombrePossible : string[] = ['1','4','7','10','13','16','19','22','25','28','31','34'];
+    const premierNombrePossible : string[] = ['1','4','7','10','13','16','19','22','25','28','31','34'];
     // On demande à l'utilisateur les numéros qu'il veut miser 
-    let nombre : number = read.keyInSelect(premierNombrePossible, 'Sur quelle rangée de numéros voulez-vous parier ?'); 
-    nombre = parseInt(premierNombrePossible[nombre]);
+    let nombre : number = questionKeySelect(premierNombrePossible, 'Sur quelle rangée de numéros voulez-vous parier ?'); 
 
     // On place les numéros dans le tableau 'numerosMises'
     numerosMises.push(nombre);
@@ -105,6 +121,27 @@ const miseTransversal = () : void => {
     placerJetons(numerosMises);
 }
 // Fonction pour miser quatre numéros en carré CARRE x8
+const miseCarre = () : void => {
+    const premierNombrePossible : string[] = ['2','5','8','11','14','17','20','23','26','29','32','35'];
+    // On demande à l'utilisateur le numéro qu'il veut miser 
+    let nombre1 : number = questionKeySelect(premierNombrePossible, 'Sur quel numero voulez-vous parier en premier ?');
+
+    let secondNombrePossible : string[] = [];
+
+    if (nombre1 == 2) {
+        secondNombrePossible = ['4', '6'];
+    }
+    else if (nombre1 == 35) {
+        secondNombrePossible = ['31, 33'];
+    }
+    else {
+        for (let i = -4; i < 5; i++) {
+            if(i != 0) {
+                secondNombrePossible.push((nombre1 + i).toString());
+            }
+        }
+    }
+}
 // Fonction pour miser six numéros (2lignes de 3) SIXAIN x5
 // Fonction pour miser 12 numéros (1 des 3 grandes zones) DOUZAINE x3
 // Fonction pour miser 24 numéros (2 des 3 grandes zones) DOUZAINE A CHEVAL x2
@@ -118,7 +155,7 @@ const miseTransversal = () : void => {
 const demanderMise = () : void => {
     let choixMise : number = read.keyInSelect(misesPossibles, "Quel type de mise voulez vous choisir ?");
     if (choixMise == 0) {
-        misePlein();
+        misePlein();        
     }
     else if (choixMise == 1) {
         miseCheval();
@@ -126,9 +163,9 @@ const demanderMise = () : void => {
     else if (choixMise == 2) {
         miseTransversal();
     }
-    // else if (choixMise == 3) {
-    //     miseCarre();
-    // }
+    else if (choixMise == 3) {
+        miseCarre();
+    }
     // else if (choixMise == 4) {
     //     miseSixian();
     // }
@@ -160,4 +197,3 @@ const roulette = () : void => {
 }
 
 roulette();
-
